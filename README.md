@@ -50,6 +50,7 @@ You do not need to retrain the models. However, if you wish to retrain manually,
 ```bash
 python -m app.train_cnn
 python -m gan.train_gan
+```
 
 4. Run the Server   
 From the project root directory, run:  
@@ -113,6 +114,7 @@ If you see (base) from Anaconda, deactivate it first:
 conda deactivate
 source .venv/bin/activate
 ```
+
 
 
 
