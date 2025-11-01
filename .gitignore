@@ -18,6 +18,9 @@ wheels/
 # macOS
 .DS_Store
 
+# Dataset
 data/
+*.tar.gz
+
 
 
