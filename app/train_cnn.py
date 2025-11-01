@@ -1,4 +1,3 @@
-# app/train_cnn.py
 import torch
 from helper_lib.model import get_model
 from helper_lib.data_loader import get_cifar10_loaders
@@ -16,7 +15,7 @@ def main():
         train_loader=train_loader,
         val_loader=val_loader,
         device=device,
-        epochs=3,                 # 可先跑 1~3 epoch 快速确认流程
+        epochs=3,                 
         save_path="models/cnn.pt"
     )
     print("Training summary:", result)

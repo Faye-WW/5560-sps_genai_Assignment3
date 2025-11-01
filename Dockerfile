@@ -25,6 +25,10 @@ COPY ./app ./app
 COPY ./helper_lib ./helper_lib
 COPY ./models ./models
 
+# GAN code + weights (so /gan/sample works immediately)
+COPY ./gan ./gan
+COPY ./artifacts ./artifacts
+
 # Expose API port
 EXPOSE 8000
 

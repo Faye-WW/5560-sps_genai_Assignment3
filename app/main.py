@@ -15,6 +15,10 @@ app = FastAPI(title="SPS GenAI API", version="0.1.0")
 def root():
     return {"message": "Hello, FastAPI with UV!"}
 
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
 # --------- Embedding: word ----------
 class WordReq(BaseModel):
     word: str = Field(..., description="Single word to return its embedding")
@@ -74,4 +78,10 @@ def classify_image(file: UploadFile = File(...)):
     content = file.file.read()
     result = predict_image_bytes(content)
     return {"filename": file.filename, **result}
+
+# GAN routes
+from fastapi import FastAPI 
+from app.routers.gan import router as gan_router
+app.include_router(gan_router) 
+
 

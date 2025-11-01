@@ -1,13 +1,12 @@
-fastapi
-uvicorn
-spacy
-numpy
-pillow
-
-
 # Optional: pin the spaCy model if you want
 # en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.8.0/en_core_web_md-3.8.0-py3-none-any.whl
 
+fastapi
+uvicorn[standard]
+spacy
+numpy
+pillow
 python-multipart
-torch
-torchvision
+torch==2.9.0
+torchvision==0.24.0
+
