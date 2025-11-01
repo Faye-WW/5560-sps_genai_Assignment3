@@ -114,14 +114,3 @@ If you see (base) from Anaconda, deactivate it first:
 conda deactivate
 source .venv/bin/activate
 ```
-
-
-
-
-
-
-
-
-
-
-
