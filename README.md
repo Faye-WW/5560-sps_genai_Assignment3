@@ -40,15 +40,16 @@ pip install -r requirements.txt
 python -m spacy download en_core_web_md
 ```
 
-3. Training the GAN (optional)  
-If you want to retrain locally:  
+3. Training the Model
+Pretrained Models
+This repository already includes pretrained model weights:
+- `models/cnn.pt` — trained on CIFAR-10 for image classification.
+- `artifacts/generator.pt` — trained GAN generator for MNIST digit generation.
+
+You do not need to retrain the models. However, if you wish to retrain manually, you can run:
 ```bash
-# Activate environment
-conda activate sps-genai
-# Train GAN
+python -m app.train_cnn
 python -m gan.train_gan
-、、、
-After training, the weights are saved to artifacts/generator.pt
 
 4. Run the Server   
 From the project root directory, run:  
@@ -112,6 +113,7 @@ If you see (base) from Anaconda, deactivate it first:
 conda deactivate
 source .venv/bin/activate
 ```
+
 
 
 
