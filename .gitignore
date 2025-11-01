@@ -18,10 +18,7 @@ wheels/
 # macOS
 .DS_Store
 
-# Datasets & trained model files
-# (not required for GitHub submission, can be regenerated)
-data/
-models/
+
 *.tar.gz
 *.zip
 

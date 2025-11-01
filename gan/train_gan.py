@@ -30,7 +30,7 @@ def main():
     os.makedirs("artifacts", exist_ok=True)
     fixed_z = torch.randn(64, LATENT_DIM, device=DEVICE)
 
-    EPOCHS = 10
+    EPOCHS = 6
     for epoch in range(EPOCHS):
         for x, _ in loader:
             x = x.to(DEVICE)
