@@ -18,7 +18,6 @@ wheels/
 # macOS
 .DS_Store
 
+data/
 
-*.tar.gz
-*.zip
 
