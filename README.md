@@ -1,19 +1,32 @@
 SPS GenAI API
-1. Project Overview   
-This project extends the FastAPI application from Assignment 1 by adding a Convolutional Neural Network (CNN) image classifier trained on CIFAR-10, while still supporting spaCy embeddings. The API can run locally or via Docker.
+1. Introduction
+This assignment implements and deploys a **Generative Adversarial Network (GAN)** using **PyTorch**, integrated into a **FastAPI** application.  
+It extends the Module 6 class activity by:  
+a. Implementing a GAN architecture that matches the assignment specification.  
+b. Training the model on the MNIST dataset to generate handwritten digits.  
+c. Adding the trained GAN to a FastAPI-based REST API with Docker deployment.  
 
-2. Features   
-Word embedding using spaCy   
-Sentence embedding + cosine similarity   
-Image classification API using CNN (CIFAR-10)   
-Docker deployment   
-Organized helper library for model training   
+1.1 GAN Architecture  
+**Generator**
+- Input: Noise vector `(BATCH_SIZE, 100)`
+- Fully connected → reshape to `(128, 7, 7)`
+- `ConvTranspose2d(128→64, kernel=4, stride=2, padding=1)` → output `(64, 14, 14)`
+  - Followed by `BatchNorm2d`, `ReLU`
+- `ConvTranspose2d(64→1, kernel=4, stride=2, padding=1)` → output `(1, 28, 28)`
+  - Followed by `Tanh`
+**Discriminator**
+- Input: Image `(1, 28, 28)`
+- `Conv2d(1→64, kernel=4, stride=2, padding=1)` → output `(64, 14, 14)`
+  - Followed by `LeakyReLU(0.2)`
+- `Conv2d(64→128, kernel=4, stride=2, padding=1)` → output `(128, 7, 7)`
+  - Followed by `BatchNorm2d`, `LeakyReLU(0.2)`
+- Flatten → `Linear(128×7×7 → 1)` → single logit (real/fake)
 
-3. Environment Setup      
+2. Environment Setup      
 Clone the repository   
 ```bash
-git clone https://github.com/Faye-WW/5560-sps_genai_Assignment2.git
-cd 5560-sps_genai_Assignment2
+git clone https://github.com/Faye-WW/5560-sps_genai_Assignment3.git
+cd 5560-sps_genai_Assignment3
 ```
 Create a virtual environment   
 ```bash
@@ -27,79 +40,81 @@ pip install -r requirements.txt
 python -m spacy download en_core_web_md
 ```
 
-4. Train the CNN Model (CIFAR-10)   
-Before classification, train the CNN model:
-```
-python -m app.train_cnn
-```
-This will generate:
-```
-models/cnn.pt
-```
+3. Training the GAN (optional)  
+If you want to retrain locally:  
+```bash
+# Activate environment
+conda activate sps-genai
+# Train GAN
+python -m gan.train_gan
+、、、
+After training, the weights are saved to artifacts/generator.pt
 
-5. Run the Server   
+4. Run the Server   
 From the project root directory, run:  
 `uvicorn app.main:app --reload`  
-You should see something like:  
+You should see something like:   
 `Uvicorn running on http://127.0.0.1:8000`
+You’ll see all endpoints, including:
+/gan/health
+/gan/sample
+/classify/image
+/embed/word, /embed/sentence
 
-6. Test the API   
-Method 1: Swagger UI (Recommended)  
+
+5. Test the API   
 Go to http://127.0.0.1:8000/docs   
 You can explore and test all endpoints interactively.  
 
-Method 2: Using curl  
-Upload an image and classify  
-```bash
-curl -X POST "http://127.0.0.1:8000/classify/image" \
-  -H "accept: application/json" \
-  -H "Content-Type: multipart/form-data" \
-  -F "file=@/path/to/your/test.png"
-```
-Replace /path/to/your/test.png with the actual file path on your computer.  
-
-7. Run with Docker  
+6. Run with Docker  
 Build image:  
 ```
 docker build -t sps-genai .
 ```
 Run container (mount model file):  
 ```
-docker run -p 8000:8000 -v $(pwd)/models:/app/models sps-genai
+docker run -p 8000:8000 sps-genai
 ```
 Access API:  
 http://127.0.0.1:8000/docs  
 
-8. Project Structure  
+7. Project Structure  
 ```text
 sps_genai/
 │
 ├── app/
-│   ├── main.py           # FastAPI API
-│   ├── embeddings.py     # spaCy embeddings
-│   ├── inference.py      # CNN prediction
-│   └── train_cnn.py      # CNN training
+│ ├── main.py # FastAPI entry point
+│ ├── train_cnn.py
+│ ├── inference.py # CNN image classifier endpoint
+│ └── routers/
+│   └── gan.py # GAN endpoints 
 │
-├── helper_lib/           # CNN helper modules
-│   ├── model.py          # CNN architecture
-│   ├── trainer.py        # training loop
-│   ├── data_loader.py    # CIFAR10 loader
-│   └── utils.py
+├── gan/
+│ ├── models.py # Generator & Discriminator definitions
+│ └── train_gan.py # Training script (MNIST dataset)
 │
-├── models/               # cnn.pt saved model (ignored by Git)
-├── Dockerfile
-├── requirements.txt
-├── .gitignore
-└── README.md
+├── artifacts/
+│ └── generator.pt # Trained GAN weights
+│
+├── helper_lib/ # Utility modules from class
+├── models/ # CNN model weights
+│
+├── Dockerfile # Docker deployment
+├── requirements.txt # Dependencies
+├── README.md # This file
+└── .gitignore
 ```
 
-9. Notes  
+8. Notes  
 Always activate the .venv environment before running the server.  
 If you see (base) from Anaconda, deactivate it first:  
 ```bash
 conda deactivate
 source .venv/bin/activate
 ```
+
+
+
 
 
 
